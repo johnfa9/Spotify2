@@ -1,12 +1,20 @@
 package com.ga.entity;
 
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
@@ -23,9 +31,26 @@ public class User {
   @Column(name="password", nullable=false)
   private String password;
   
-//  private List<Song> songList;
+  @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+  @JoinColumn(name = "user_role_id", nullable = false)
+  private UserRole userRole;
+
+  @ManyToMany(fetch = FetchType.LAZY,
+      cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+  @JoinTable(name = "user_song", joinColumns = {@JoinColumn(name = "user_id")},
+      inverseJoinColumns = @JoinColumn(name = "song_id"))
+  private List<Song> songList;
 
   public User(){}
+  
+  public List<Song> addSong(Song song) {
+    if (songList == null){
+      songList = new ArrayList<>();
+    }
+    songList.add(song);
+
+    return songList;
+  }
   
   public Long getUserId() {
     return userId;
@@ -39,7 +64,7 @@ public class User {
     return username;
   }
 
-  public void setUserName(String username) {
+  public void setUsername(String username) {
     this.username = username;
   }
 
@@ -51,12 +76,19 @@ public class User {
     this.password = password;
   }
 
-//  public List<Song> getSongList() {
-//    return songList;
-//  }
-//
-//  public void setSongList(List<Song> songList) {
-//    this.songList = songList;
-//  }
+  public List<Song> getSongList() {
+    return songList;
+  }
 
+  public void setSongList(List<Song> songList) {
+    this.songList = songList;
+  }
+
+  public UserRole getUserRole() {
+    return userRole;
+  }
+
+  public void setUserRole(UserRole userRole) {
+    this.userRole = userRole;
+  }
 }

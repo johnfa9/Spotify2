@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,6 +31,10 @@ public class User {
   
   @Column(name="password", nullable=false)
   private String password;
+  
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "user_profile_id")
+  private UserProfile userProfile;
   
   @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinColumn(name = "user_role_id", nullable = false)
@@ -90,5 +95,13 @@ public class User {
 
   public void setUserRole(UserRole userRole) {
     this.userRole = userRole;
+  }
+  
+  public UserProfile getUserProfile() {
+    return userProfile;
+  }
+
+  public void setUserProfile(UserProfile userProfile) {
+    this.userProfile = userProfile;
   }
 }

@@ -6,7 +6,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import com.ga.entity.Song;
-import com.ga.entity.User;
 
 @Repository
 public class SongDaoImpl implements SongDao {
@@ -16,41 +15,35 @@ public class SongDaoImpl implements SongDao {
 
   @Override
   public Song createSong(Song song) {
-    Session session = sessionFactory.getCurrentSession();
-    try {
+    
+    try(Session session = sessionFactory.getCurrentSession();) {
       session.beginTransaction();
       session.save(song);
       session.getTransaction().commit();
-    } finally {
-      session.close();
     }
     return song;
   }
 
   @Override
   public Song deleteSong(Long songId) {
-    Session session = sessionFactory.getCurrentSession();
     Song song = null;
-    try {
+    try(Session session = sessionFactory.getCurrentSession();) {
       session.beginTransaction();
       song = session.get(Song.class, songId);
       session.delete(song);
       session.getTransaction().commit();
-    } finally {
-      session.close();
     }
     return song;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public List<Song> getAllSongs() {
-    Session session = sessionFactory.getCurrentSession();
+   
     List<Song> songList = null;
-    try {
+    try(Session session = sessionFactory.getCurrentSession();) {
       session.beginTransaction();
       songList = session.createQuery("From Song").getResultList();
-    } finally {
-      session.close();
     }
     return songList;
   }

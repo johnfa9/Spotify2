@@ -56,20 +56,23 @@ public class UserController {
     return userService.listUsers();
   }
 
+  @PreAuthorize("#username == authentication.name")
   @PutMapping("/{username}/song/add/{songId}")
-  public User addSong(@PathVariable String username, @PathVariable Long songId) {
+  public User addSong(@PathVariable("username") String username, @PathVariable Long songId) {
 
     return userService.addSongBySongId(username, songId);
   }
 
+  @PreAuthorize("#username == authentication.name")
   @DeleteMapping("/{username}/song/delete/{songId}")
-  public User deleteSong(@PathVariable String username, @PathVariable Long songId) {
+  public User deleteSong(@PathVariable("username") String username, @PathVariable Long songId) {
 
     return userService.deleteSongBySongId(username, songId);
   }
 
+  @PreAuthorize("#username == authentication.name")
   @GetMapping("/songlist/{username}")
-  public List<Song> listSongsByUsername(@PathVariable String username) {
+  public List<Song> listSongsByUsername(@PathVariable("username") String username) {
 
     return userService.listSongsByUser(username);
   }

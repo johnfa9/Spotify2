@@ -1,5 +1,7 @@
 package com.ga.dao;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,18 @@ public class UserRoleDaoImpl implements UserRoleDao {
     }
 
     return userRole;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<UserRole> listAllRoles() {
+
+    List<UserRole> userRoleList = null;
+    try(Session session = sessionFactory.getCurrentSession();){
+      session.beginTransaction();
+      userRoleList = session.createQuery("FROM UserRole").getResultList();
+    }
+    return userRoleList;
   }
 
 }

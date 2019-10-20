@@ -1,6 +1,9 @@
 package com.ga.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,5 +28,10 @@ public class UserRoleController {
   @PostMapping
   public UserRole createRole(@RequestBody UserRole userRole) {
     return userRoleService.createRole(userRole);
+  }
+  
+  @GetMapping("/list")
+  public List<UserRole> listAllRoles(){
+    return userRoleService.listAllRoles();
   }
 }

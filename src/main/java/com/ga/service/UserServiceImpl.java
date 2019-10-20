@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ga.config.JwtUtil;
 import com.ga.dao.UserDao;
+import com.ga.entity.Song;
 import com.ga.entity.User;
 
 @Service
@@ -59,9 +60,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User addSong(String username, Long songId) {
-    
-    return userDao.addSong(username, songId);
+  public User addSongBySongId(String username, Long songId) {
+    return userDao.addSongBySongId(username, songId);
   }
 
   @Override
@@ -83,6 +83,23 @@ public class UserServiceImpl implements UserService {
 
     return authorities;
   }
+
+  @Override
+  public String deleteUser(String username) {
+    return userDao.deleteUser(username);
+  }
+
+
+  @Override
+  public User deleteSongBySongId(String username, Long songId) {
+    return userDao.deleteSongBySongId(username, songId);
+  }
+
+  @Override
+  public List<Song> listSongsByUser(String username) {
+    return userDao.listSongsByUser(username);
+  }
+
 
 
 }

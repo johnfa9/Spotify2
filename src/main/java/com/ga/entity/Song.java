@@ -14,6 +14,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+
 @Entity
 @Table(name = "songs")
 public class Song {
@@ -29,12 +30,13 @@ public class Song {
   @Column(nullable = false)
   private Integer length;
 
-  @JsonIgnore
+  
   @ManyToMany(fetch = FetchType.LAZY,
       cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
   @JoinTable(name = "user_song", joinColumns = {@JoinColumn(name = "user_id")},
       inverseJoinColumns = @JoinColumn(name = "song_id"))
-  private List<User> subscriberList;
+  @JsonIgnore
+  private List<User> userList;
 
   public Song() {}
 
@@ -62,12 +64,12 @@ public class Song {
     this.length = length;
   }
 
-  public List<User> getSubscriberList() {
-    return subscriberList;
+  public List<User> getUserList() {
+    return userList;
   }
 
-  public void setSubscriberList(List<User> subscriberList) {
-    this.subscriberList = subscriberList;
+  public void setUserList(List<User> userList) {
+    this.userList = userList;
   }
 
 

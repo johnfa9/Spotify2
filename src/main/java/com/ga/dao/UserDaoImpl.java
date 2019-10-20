@@ -22,7 +22,6 @@ public class UserDaoImpl implements UserDao {
   @Override
   public User signup(User user) {
 
-
     String roleName = user.getUserRole().getName();
     UserRole userRole = userRoleDao.getRole(roleName);
 
@@ -45,6 +44,7 @@ public class UserDaoImpl implements UserDao {
 
   @Override
   public User login(User user) {
+
     User loginUsers = null;
 
     try (Session session = sessionFactory.getCurrentSession();) {
@@ -59,9 +59,23 @@ public class UserDaoImpl implements UserDao {
     return loginUsers;
   }
 
+  @Override
+  public String deleteUser(String username) {
+
+    User user = this.getUserByUsername(username);
+
+    try (Session session = sessionFactory.getCurrentSession();) {
+      session.beginTransaction();
+      session.delete(user);
+      session.getTransaction().commit();
+    }
+    return user.getUsername();
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public List<User> listUsers() {
+
     List<User> allUsers = null;
 
     Session session = sessionFactory.getCurrentSession();
@@ -79,6 +93,7 @@ public class UserDaoImpl implements UserDao {
 
   @Override
   public User getUserByUsername(String username) {
+
     User user = null;
 
     Session session = sessionFactory.getCurrentSession();
@@ -96,7 +111,8 @@ public class UserDaoImpl implements UserDao {
   }
 
   @Override
-  public User addSong(String username, Long songId) {
+  public User addSongBySongId(String username, Long songId) {
+
     User user = null;
     Song song = null;
 
@@ -107,7 +123,7 @@ public class UserDaoImpl implements UserDao {
           .uniqueResult();
       song = session.get(Song.class, songId);
 
-      if(user.getSongList().contains(song) == false){
+      if (user.getSongList().contains(song) == false) {
         user.addSong(song);
 
         session.update(user);
@@ -117,9 +133,50 @@ public class UserDaoImpl implements UserDao {
         System.out.println("warning: duplicate song");
       }
 
+    }
+    return user;
+  }
+
+  @Override
+  public User deleteSongBySongId(String username, Long songId) {
+
+    User user = null;
+    Song song = null;
+
+    try (Session session = sessionFactory.getCurrentSession();) {
+      session.beginTransaction();
+
+      user = (User) session.createQuery("FROM User u WHERE u.username = '" + username + "'")
+          .uniqueResult();
+      song = session.get(Song.class, songId);
+
+      if (user.getSongList() != null && user.getSongList().contains(song) == true) {
+        user.deleteSong(song);
+
+        session.update(user);
+
+        session.getTransaction().commit();
+      } else {
+        System.out.println("warning: song doesn't exist");
+      }
 
     }
     return user;
+  }
+
+  @Override
+  public List<Song> listSongsByUser(String username) {
+
+    User user = null;
+    List<Song> songList = null;
+    try (Session session = sessionFactory.getCurrentSession();) {
+      session.beginTransaction();
+
+      user = (User) session.createQuery("FROM User u WHERE u.username = '" + username + "'")
+          .uniqueResult();
+      songList = user.getSongList();
+    }
+    return songList;
   }
 
 }

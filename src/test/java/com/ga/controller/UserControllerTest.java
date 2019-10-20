@@ -40,37 +40,40 @@ public class UserControllerTest {
   @InjectMocks
   UserController userController;
 
+  List<User> userList;
+  List<Song> songList;
+
+  @InjectMocks
+  User user1;
+
+  @InjectMocks
+  Song song1;
+  
   @Before
   public void init() {
 
     mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
   }
 
-  List<User> userList = null;
-  List<Song> songList = null;
-  User user1;
-  Song song1;
-  
   @Before
-  public void setup(){
+  public void setup() {
+
     userList = new ArrayList<User>();
     songList = new ArrayList<Song>();
-    
-    user1 = new User();
+
     user1.setUserId(1L);
     user1.setUsername("kyle");
     user1.setPassword("kyle");
-    
-    song1 = new Song();
+
     song1.setSongId(1L);
     song1.setTitle("song1");
     song1.setLength(1);
-    
+
     songList.add(song1);
     user1.setSongList(songList);
     userList.add(user1);
   }
-  
+
   @Test
   public void signup_User_Success() throws Exception {
 
@@ -141,19 +144,20 @@ public class UserControllerTest {
     when(userService.deleteSongBySongId(anyString(), anyLong())).thenReturn(user1);
 
     mockMvc.perform(requestBuilder).andExpect(status().isOk());
-    
+
     user1.deleteSong(song1);
     assertEquals(0, user1.getSongList().size());
   }
 
   @Test
   public void listSongsByUsername_SongList_Success() throws Exception {
+
     RequestBuilder requestBuilder = MockMvcRequestBuilders.get("/user/songlist/kyle");
 
     when(userService.listSongsByUser(anyString())).thenReturn(user1.getSongList());
 
     mockMvc.perform(requestBuilder).andExpect(status().isOk());
-    
+
     assertEquals(1, user1.getSongList().size());
   }
 

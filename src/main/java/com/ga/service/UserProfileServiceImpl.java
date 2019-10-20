@@ -1,7 +1,6 @@
 package com.ga.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.ga.dao.UserDao;
@@ -10,31 +9,35 @@ import com.ga.entity.User;
 import com.ga.entity.UserProfile;
 
 @Service
-public class UserProfileServiceImpl implements UserProfileService{
+public class UserProfileServiceImpl implements UserProfileService {
+
+  private UserDao userDao;
+
+  private UserProfileDao userProfileDao;
 
   @Autowired
-  UserDao userDao;
-  
-  @Autowired
-  UserProfileDao userProfileDao;
-  
-  @Autowired
-  UserService userService;
-  
+  public UserProfileServiceImpl(UserDao userDao, UserProfileDao userProfileDao) {
+    this.userDao = userDao;
+    this.userProfileDao = userProfileDao;
+  }
+
   @Override
   public UserProfile createProfile(String username, UserProfile userProfile) {
-    
-    UserDetails userDetails = userService.loadUserByUsername(username);
-    System.out.println(userDetails.getUsername());
-    
+
     User user = userDao.getUserByUsername(username);
-    
-    if(user.getUserProfile() != null){
+
+    if (user.getUserProfile() != null) {
       System.out.println("profile exist, please use update");
-    }else{
+    } else {
       return userProfileDao.createProfile(username, userProfile);
     }
-    return user.getUserProfile();   
+    return user.getUserProfile();
   }
-  
+
+  @Override
+  public UserProfile getUserProfile(String username) {
+
+    return userProfileDao.getUserProfile(username);
+  }
+
 }

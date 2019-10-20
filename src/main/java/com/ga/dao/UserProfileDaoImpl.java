@@ -35,4 +35,14 @@ public class UserProfileDaoImpl implements UserProfileDao {
 
     return userProfile;
   }
+
+  @Override
+  public UserProfile getUserProfile(String username) {
+
+    User user = userDao.getUserByUsername(username);
+
+    UserProfile userProfile = user.getUserProfile();
+
+    return userProfile;
+  }
 }

@@ -28,8 +28,8 @@ Thr- Sun: step 4: Spring Security
 - What we like: we collaborated together to debug the issue and solve it.
 
 Sat-Sun: step 5: mocking and stubbing unit tests
-- What we did: finished mocking unit tests for user, and stubbing unit tests for user profile.
+- What we did: finished mocking unit tests for user, and stubbing unit tests for user profile. Tested all gets and puts in postman.
 - Design Decision: no much design
 - How we did it: independent programming
-- Challenges: 1. some tests may require multiple components to collaborate 2. the way to mock session.get() and session.delete() 3. it is hard to think about all cases to cover.
+- Challenges: 1. some tests may require multiple components to collaborate 2. the way to mock session.get() and session.delete() 3. it is hard to think about all cases to cover. 4. postman testing uncovered many coding challenges
 - What we like: writing the tests refreshed the understanding of spring web app structure.
